@@ -1,24 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:socially/features/auth/view/signup_view.dart';
-import 'package:socially/theme/pallete.dart';
-
-import '../../../common/rounded_small_button.dart';
-import '../../../constants/ui_constants.dart';
+import '../../../common/common.dart';
+import '../../../constants/constants.dart';
+import '../../../theme/theme.dart';
 import '../widgets/auth_field.dart';
+import 'login_view.dart';
 
-class LoginView extends StatefulWidget {
+class SignUpView extends StatefulWidget {
   static route() => MaterialPageRoute(
-        builder: (context) => const LoginView(),
+        builder: (context) => const SignUpView(),
       );
-
-  const LoginView({super.key});
+  const SignUpView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _SignUpViewState extends State<SignUpView> {
   final appBar = UiConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -73,13 +71,13 @@ class _LoginViewState extends State<LoginView> {
                 // textspan
                 RichText(
                   text: TextSpan(
-                    text: "Don't have an account?",
+                    text: "Already have an account?",
                     style: const TextStyle(
                       fontSize: 16,
                     ),
                     children: [
                       TextSpan(
-                        text: '\tSign Up',
+                        text: '\tLogin',
                         style: const TextStyle(
                           color: Pallete.blueColor,
                           fontSize: 16,
@@ -88,7 +86,7 @@ class _LoginViewState extends State<LoginView> {
                           ..onTap = () {
                             Navigator.push(
                               context,
-                              SignUpView.route(),
+                              LoginView.route(),
                             );
                           },
                       ),

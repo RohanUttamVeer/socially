@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socially/constants/assets_constants.dart';
-
 import '../theme/pallete.dart';
 
 class UiConstants {
@@ -13,6 +12,7 @@ class UiConstants {
         height: 30,
       ),
       centerTitle: true,
+      automaticallyImplyLeading: false,
     );
   }
 }
