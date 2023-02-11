@@ -34,3 +34,6 @@ class MyApp extends StatelessWidget {
 // => export
 // => feature-first approach
 // => flutter_svg
+// => functional programming
+// => typedef
+// => riverpod
