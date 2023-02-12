@@ -46,3 +46,4 @@ class MyApp extends ConsumerWidget {
 // => typedef
 // => riverpod
 // => immutable
+// => appwrite database
