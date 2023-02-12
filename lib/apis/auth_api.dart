@@ -21,11 +21,24 @@ abstract class IAuthAPI {
     required String email,
     required String password,
   });
+  Future<model.Account?> currentUserAccount();
 }
 
 class AuthAPI implements IAuthAPI {
   final Account _account;
   AuthAPI({required Account account}) : _account = account;
+
+  @override
+  Future<model.Account?> currentUserAccount() async {
+    try {
+      return await _account.get();
+    } on AppwriteException {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   @override
   FutureEither<model.Account> signUp({
     required String email,
@@ -49,6 +62,7 @@ class AuthAPI implements IAuthAPI {
       );
     }
   }
+
   @override
   FutureEither<model.Session> login({
     required String email,
