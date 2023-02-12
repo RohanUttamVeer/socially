@@ -22,3 +22,5 @@ State Notifies Provider
 ref.watch(appwriteClientProvider) : listens to the appwriteClientProvider every time it changes
 
 ref.read(appwriteClientProvider) : listens to the appwriteClientProvider only once
+
+if it's a dependency you have to create a provider

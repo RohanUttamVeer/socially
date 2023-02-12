@@ -2,14 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:appwrite/models.dart' as model;
 import 'package:socially/apis/auth_api.dart';
+import 'package:socially/apis/user_api.dart';
 import 'package:socially/features/auth/view/login_view.dart';
 import 'package:socially/features/home/view/home_view.dart';
+import 'package:socially/models/user_model.dart';
 import '../../../core/core.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {
   return AuthController(
     authAPI: ref.watch(authAPIProvider),
+    userAPI: ref.watch(userAPIProvider),
   );
 });
 
@@ -20,8 +23,12 @@ final currentUserAccountProvider = FutureProvider((ref) async {
 
 class AuthController extends StateNotifier<bool> {
   final AuthAPI _authAPI;
-  AuthController({required AuthAPI authAPI})
-      : _authAPI = authAPI,
+  final UserAPI _userAPI;
+  AuthController({
+    required AuthAPI authAPI,
+    required UserAPI userAPI,
+  })  : _authAPI = authAPI,
+        _userAPI = userAPI,
         super(false);
   //state = isLoading
 
@@ -43,9 +50,29 @@ class AuthController extends StateNotifier<bool> {
         context,
         l.message,
       ),
-      (r) {
-        showSnackBar(context, 'Account Created! Please Login');
-        Navigator.push(context, LoginView.route());
+      (r) async {
+        UserModel userModel = UserModel(
+          email: email,
+          name: getNameFromEmail(email),
+          followers: const [],
+          following: const [],
+          profilePic: '',
+          bannerPic: '',
+          uid: '',
+          bio: '',
+          isTwitterBlue: false,
+        );
+        final response2 = await _userAPI.saveUserData(userModel);
+        response2.fold(
+          (l) => showSnackBar(
+            context,
+            l.message,
+          ),
+          (r) {
+            showSnackBar(context, 'Account Created! Please Login');
+            Navigator.push(context, LoginView.route());
+          },
+        );
       },
     );
   }
