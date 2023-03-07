@@ -7,7 +7,11 @@ import 'package:socially/features/home/view/home_view.dart';
 import 'theme/app_theme.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {

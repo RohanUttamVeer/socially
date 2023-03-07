@@ -31,10 +31,14 @@ class AuthAPI implements IAuthAPI {
   @override
   Future<model.Account?> currentUserAccount() async {
     try {
+      var a = await _account.get();
+      print(a.name);
+      print(a.$id);
       return await _account.get();
     } on AppwriteException {
       return null;
     } catch (e) {
+      print(e);
       return null;
     }
   }

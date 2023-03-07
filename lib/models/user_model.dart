@@ -11,7 +11,7 @@ class UserModel {
   final String uid;
   final String bio;
   final bool isTwitterBlue;
- const UserModel({
+  const UserModel({
     required this.email,
     required this.name,
     required this.followers,
@@ -64,8 +64,8 @@ class UserModel {
     return UserModel(
       email: map['email'] as String,
       name: map['name'] as String,
-      followers: List<String>.from((map['followers'] as List<String>)),
-      following: List<String>.from((map['following'] as List<String>)),
+      followers: List<String>.from((map['followers'])),
+      following: List<String>.from((map['following'])),
       profilePic: map['profilePic'] as String,
       bannerPic: map['bannerPic'] as String,
       uid: map['\$id'] as String,
@@ -73,7 +73,6 @@ class UserModel {
       isTwitterBlue: map['isTwitterBlue'] as bool,
     );
   }
-
 
   @override
   String toString() {
@@ -83,29 +82,28 @@ class UserModel {
   @override
   bool operator ==(covariant UserModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.email == email &&
-      other.name == name &&
-      listEquals(other.followers, followers) &&
-      listEquals(other.following, following) &&
-      other.profilePic == profilePic &&
-      other.bannerPic == bannerPic &&
-      other.uid == uid &&
-      other.bio == bio &&
-      other.isTwitterBlue == isTwitterBlue;
+
+    return other.email == email &&
+        other.name == name &&
+        listEquals(other.followers, followers) &&
+        listEquals(other.following, following) &&
+        other.profilePic == profilePic &&
+        other.bannerPic == bannerPic &&
+        other.uid == uid &&
+        other.bio == bio &&
+        other.isTwitterBlue == isTwitterBlue;
   }
 
   @override
   int get hashCode {
     return email.hashCode ^
-      name.hashCode ^
-      followers.hashCode ^
-      following.hashCode ^
-      profilePic.hashCode ^
-      bannerPic.hashCode ^
-      uid.hashCode ^
-      bio.hashCode ^
-      isTwitterBlue.hashCode;
+        name.hashCode ^
+        followers.hashCode ^
+        following.hashCode ^
+        profilePic.hashCode ^
+        bannerPic.hashCode ^
+        uid.hashCode ^
+        bio.hashCode ^
+        isTwitterBlue.hashCode;
   }
 }

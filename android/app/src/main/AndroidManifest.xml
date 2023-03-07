@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.socially">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="socially"
+        android:label="Socially"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
