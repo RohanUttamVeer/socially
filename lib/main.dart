@@ -40,10 +40,11 @@ class MyApp extends ConsumerWidget {
   }
 }
 
+// flutter version 3.7.6
 // => docker
 // => appwrite
 // => svg
-// => export
+// => exportzzoha
 // => feature-first approach
 // => flutter_svg
 // => functional programming
