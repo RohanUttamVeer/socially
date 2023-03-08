@@ -3,5 +3,6 @@ class AppwriteConstants {
   static const String projectId = "63e65f5b38caba16c84d";
   static const String databaseId = "64072575eab38954087f";
   static const String usersCollection = "64072592b9775571c4f9";
+  static const String postCollection = "6408a2c67b09b450542b";
   // static const String endPoint = "http://localhost:80/v1";
 }

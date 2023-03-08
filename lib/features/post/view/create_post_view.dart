@@ -8,6 +8,7 @@ import 'package:socially/common/common.dart';
 import 'package:socially/constants/assets_constants.dart';
 import 'package:socially/core/core.dart';
 import 'package:socially/features/auth/controller/auth_controller.dart';
+import 'package:socially/features/post/controller/post_controller.dart';
 import 'package:socially/theme/pallete.dart';
 
 class CreatePostScreen extends ConsumerStatefulWidget {
@@ -25,19 +26,28 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   final postController = TextEditingController();
   late List<File> images = [];
   @override
+  void dispose() {
+    super.dispose();
+    postController.dispose();
+  }
+
+  void sharePost() {
+    ref.read(postControllerProvider.notifier).sharePost(
+          images: images,
+          text: postController.text,
+          context: context,
+        );
+  }
+
+  onPickImages() async {
+    images = await pickImages();
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    @override
-    void dispose() {
-      super.dispose();
-      postController.dispose();
-    }
-
-    onPickImages() async {
-      images = await pickImages();
-      setState(() {});
-    }
-
     var currentUser = ref.watch(currentUserDetailsProvider).value;
+    var isLoading = ref.watch(postControllerProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -51,14 +61,14 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         ),
         actions: [
           RoundedSmallButton(
-            onTap: () {},
+            onTap: sharePost,
             label: 'Post',
             bgColor: Pallete.blueColor,
             textColor: Pallete.whiteColor,
           ),
         ],
       ),
-      body: currentUser == null
+      body: isLoading || currentUser == null
           ? const Loader()
           : SafeArea(
               child: SingleChildScrollView(
@@ -76,13 +86,13 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                           child: TextField(
                             controller: postController,
                             style: const TextStyle(
-                              fontSize: 22,
+                              fontSize: 20,
                             ),
                             decoration: const InputDecoration(
                               hintText: "What are you up to ?!",
                               hintStyle: TextStyle(
                                 color: Pallete.greyColor,
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w600,
                               ),
                               border: InputBorder.none,
@@ -115,7 +125,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                                 },
                               ).toList(),
                               options: CarouselOptions(
-                                height: 200,
+                                height: 150,
                                 enableInfiniteScroll: false,
                               ),
                             ),
