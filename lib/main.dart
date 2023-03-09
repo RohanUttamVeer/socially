@@ -52,3 +52,5 @@ class MyApp extends ConsumerWidget {
 // => riverpod
 // => immutable
 // => appwrite database
+// => enums, extension
+// TODO: pass ip address from mobile in place of local host or ***.***.*.*** static

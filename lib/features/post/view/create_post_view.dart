@@ -125,7 +125,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                                 },
                               ).toList(),
                               options: CarouselOptions(
-                                height: 150,
+                                height: 170,
                                 enableInfiniteScroll: false,
                               ),
                             ),
