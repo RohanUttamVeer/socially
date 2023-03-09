@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:socially/apis/post_api.dart';
-import 'package:socially/core/core.dart';
-import 'package:socially/core/enums/post_type_enum.dart';
-import 'package:socially/features/auth/controller/auth_controller.dart';
-import 'package:socially/models/post_model.dart';
 
+import '../../../apis/post_api.dart';
 import '../../../apis/storage_api.dart';
+import '../../../core/enums/post_type_enum.dart';
+import '../../../core/utils.dart';
+import '../../../models/post_model.dart';
+import '../../auth/controller/auth_controller.dart';
 
 final postControllerProvider =
     StateNotifierProvider<PostController, bool>((ref) {
@@ -17,6 +17,11 @@ final postControllerProvider =
     postAPI: ref.watch(postAPIProvider),
     storageAPI: ref.watch(storageAPIProvider),
   );
+});
+
+final getPostProvider = FutureProvider((ref) async {
+  final postController = ref.watch(postControllerProvider.notifier);
+  return postController.getPosts();
 });
 
 class PostController extends StateNotifier<bool> {
@@ -32,6 +37,12 @@ class PostController extends StateNotifier<bool> {
         _postAPI = postAPI,
         _storageAPI = storageAPI,
         super(false);
+
+  Future<List<Post>> getPosts() async {
+    final postList = await _postAPI.getPost();
+    return postList.map((post) => Post.fromMap(post.data)).toList();
+  }
+
   void sharePost({
     required List<File> images,
     required String text,

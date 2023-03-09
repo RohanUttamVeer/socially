@@ -75,14 +75,14 @@ class Post {
   factory Post.fromMap(Map<String, dynamic> map) {
     return Post(
       text: map['text'] as String,
-      hashtags: List<String>.from((map['hashtags'] as List<String>)),
+      hashtags: List<String>.from((map['hashtags'])),
       link: map['link'] as String,
-      imageLinks: List<String>.from((map['imageLinks'] as List<String>)),
+      imageLinks: List<String>.from((map['imageLinks'])),
       uid: map['uid'] as String,
       postType: (map['postType'] as String).toPostTypeEnum(),
       postedAt: DateTime.fromMillisecondsSinceEpoch(map['postedAt'] as int),
-      likes: List<String>.from((map['likes'] as List<String>)),
-      commentId: List<String>.from((map['commentId'] as List<String>)),
+      likes: List<String>.from((map['likes'])),
+      commentId: List<String>.from((map['commentId'])),
       id: map['\$id'] as String,
       reshareCount: map['reshareCount'] as int,
     );

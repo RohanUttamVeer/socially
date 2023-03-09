@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socially/constants/assets_constants.dart';
+import '../features/post/widgets/post_list.dart';
 import '../theme/pallete.dart';
 
 class UiConstants {
@@ -16,9 +17,9 @@ class UiConstants {
     );
   }
 
-  static List<Widget> bottomTabBarPages = [
-    const Text('Feed Screen '),
-    const Text('Search Screen '),
-    const Text('Notification Screen '),
+  static const List<Widget> bottomTabBarPages = [
+    PostList(),
+    Text('Search Screen '),
+    Text('Notification Screen '),
   ];
 }
