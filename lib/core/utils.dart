@@ -31,6 +31,5 @@ Future<List<File>> pickImages() async {
       images.add(File(image.path));
     }
   }
-  print(images);
   return images;
 }
