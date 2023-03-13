@@ -53,4 +53,5 @@ class MyApp extends ConsumerWidget {
 // => immutable
 // => appwrite database
 // => enums, extension
+// => autodispose in appwrite
 // TODO: pass ip address from mobile in place of local host or ***.***.*.*** static

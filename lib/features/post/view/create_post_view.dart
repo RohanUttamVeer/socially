@@ -37,6 +37,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           text: postController.text,
           context: context,
         );
+    Navigator.pop(context);
   }
 
   onPickImages() async {

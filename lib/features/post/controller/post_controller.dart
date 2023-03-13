@@ -24,6 +24,11 @@ final getPostProvider = FutureProvider((ref) async {
   return postController.getPosts();
 });
 
+final getLatestPostProvider = StreamProvider((ref) {
+  final postAPI = ref.watch(postAPIProvider);
+  return postAPI.getLatestPost();
+});
+
 class PostController extends StateNotifier<bool> {
   final PostAPI _postAPI;
   final StorageAPI _storageAPI;
