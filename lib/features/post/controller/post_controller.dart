@@ -8,6 +8,7 @@ import '../../../apis/storage_api.dart';
 import '../../../core/enums/post_type_enum.dart';
 import '../../../core/utils.dart';
 import '../../../models/post_model.dart';
+import '../../../models/user_model.dart';
 import '../../auth/controller/auth_controller.dart';
 
 final postControllerProvider =
@@ -46,6 +47,23 @@ class PostController extends StateNotifier<bool> {
   Future<List<Post>> getPosts() async {
     final postList = await _postAPI.getPost();
     return postList.map((post) => Post.fromMap(post.data)).toList();
+  }
+
+  void likePost(Post post, UserModel user) async {
+    List<String> likes = post.likes;
+
+    if (post.likes.contains(user.uid)) {
+      likes.remove(user.uid);
+    } else {
+      likes.add(user.uid);
+    }
+
+    post = post.copyWith(likes: likes);
+
+    final res = await _postAPI.likeTweet(post);
+    res.fold((l) {
+      print(l.message);
+    }, (r) => null);
   }
 
   void sharePost({

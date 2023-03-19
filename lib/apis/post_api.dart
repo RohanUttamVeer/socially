@@ -18,6 +18,7 @@ abstract class IPostAPI {
   FutureEither<Document> sharePost(Post post);
   Future<List<Document>> getPost();
   Stream<RealtimeMessage> getLatestPost();
+  FutureEither<Document> likeTweet(Post post);
 }
 
 class PostAPI implements IPostAPI {
@@ -66,5 +67,28 @@ class PostAPI implements IPostAPI {
     return _realtime.subscribe([
       'databases.${AppwriteConstants.databaseId}.collections.${AppwriteConstants.postCollection}.documents'
     ]).stream;
+  }
+
+  @override
+  FutureEither<Document> likeTweet(Post post) async {
+    try {
+      final document = await _db.updateDocument(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.postCollection,
+        documentId: post.id,
+        data: {
+          'likes': post.likes,
+        },
+      );
+      return right(document);
+    } on AppwriteException catch (e, stackTrace) {
+      return left(
+        Failure(e.message ?? "Unexpected Error", stackTrace),
+      );
+    } catch (e, stackTrace) {
+      return left(
+        Failure(e.toString(), stackTrace),
+      );
+    }
   }
 }
