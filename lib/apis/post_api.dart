@@ -19,6 +19,7 @@ abstract class IPostAPI {
   Future<List<Document>> getPost();
   Stream<RealtimeMessage> getLatestPost();
   FutureEither<Document> likeTweet(Post post);
+  FutureEither<Document> updateReshareCount(Post post);
 }
 
 class PostAPI implements IPostAPI {
@@ -78,6 +79,29 @@ class PostAPI implements IPostAPI {
         documentId: post.id,
         data: {
           'likes': post.likes,
+        },
+      );
+      return right(document);
+    } on AppwriteException catch (e, stackTrace) {
+      return left(
+        Failure(e.message ?? "Unexpected Error", stackTrace),
+      );
+    } catch (e, stackTrace) {
+      return left(
+        Failure(e.toString(), stackTrace),
+      );
+    }
+  }
+
+  @override
+  FutureEither<Document> updateReshareCount(Post post) async {
+    try {
+      final document = await _db.updateDocument(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.postCollection,
+        documentId: post.id,
+        data: {
+          'reshareCount': post.reshareCount,
         },
       );
       return right(document);

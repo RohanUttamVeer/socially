@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -66,6 +67,51 @@ class PostController extends StateNotifier<bool> {
     }, (r) => null);
   }
 
+  void resharePost(
+    Post post,
+    UserModel currentUser,
+    BuildContext context,
+  ) async {
+    post = post.copyWith(
+      rePostedBy: currentUser.name,
+      likes: [],
+      commentId: [],
+      reshareCount: post.reshareCount + 1,
+    );
+
+    final res = await _postAPI.updateReshareCount(post);
+    res.fold(
+      (l) {
+        showSnackBar(
+          context,
+          l.message,
+        );
+      },
+      (r) async {
+        post = post.copyWith(
+          id: ID.unique(),
+          reshareCount: 0,
+          postedAt: DateTime.now(),
+        );
+        final res2 = await _postAPI.sharePost(post);
+        res2.fold(
+          (l) {
+            showSnackBar(
+              context,
+              l.message,
+            );
+          },
+          (r) {
+            showSnackBar(
+              context,
+              "Re-Posted",
+            );
+          },
+        );
+      },
+    );
+  }
+
   void sharePost({
     required List<File> images,
     required String text,
@@ -111,6 +157,7 @@ class PostController extends StateNotifier<bool> {
       commentId: const [],
       id: '',
       reshareCount: 0,
+      rePostedBy: '',
     );
     final response = await _postAPI.sharePost(post);
     state = false;
@@ -143,6 +190,7 @@ class PostController extends StateNotifier<bool> {
       commentId: const [],
       id: '',
       reshareCount: 0,
+      rePostedBy: '',
     );
     final response = await _postAPI.sharePost(post);
     state = false;
