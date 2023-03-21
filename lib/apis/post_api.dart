@@ -20,6 +20,8 @@ abstract class IPostAPI {
   Stream<RealtimeMessage> getLatestPost();
   FutureEither<Document> likeTweet(Post post);
   FutureEither<Document> updateReshareCount(Post post);
+  Future<List<Document>> getRepliesToPost(Post post);
+  Future<Document> getPostById(String id);
 }
 
 class PostAPI implements IPostAPI {
@@ -114,5 +116,26 @@ class PostAPI implements IPostAPI {
         Failure(e.toString(), stackTrace),
       );
     }
+  }
+
+  @override
+  Future<List<Document>> getRepliesToPost(Post post) async {
+    final document = await _db.listDocuments(
+      databaseId: AppwriteConstants.databaseId,
+      collectionId: AppwriteConstants.postCollection,
+      queries: [
+        Query.equal('repliedTo', post.id),
+      ],
+    );
+    return document.documents;
+  }
+
+  @override
+  Future<Document> getPostById(String id) async {
+    return _db.getDocument(
+      databaseId: AppwriteConstants.databaseId,
+      collectionId: AppwriteConstants.postCollection,
+      documentId: id,
+    );
   }
 }

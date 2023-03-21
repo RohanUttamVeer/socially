@@ -36,6 +36,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           images: images,
           text: postController.text,
           context: context,
+          repliedTo: '',
         );
     Navigator.pop(context);
   }
