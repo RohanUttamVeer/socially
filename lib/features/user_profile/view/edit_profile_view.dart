@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socially/core/core.dart';
 import 'package:socially/features/auth/controller/auth_controller.dart';
+import 'package:socially/features/user_profile/controller/user_profile_controller.dart';
 import 'dart:io';
 import '../../../common/loading_page.dart';
 import '../../../theme/pallete.dart';
@@ -18,10 +19,15 @@ class EditProfileView extends ConsumerStatefulWidget {
 }
 
 class _EditProfileViewState extends ConsumerState<EditProfileView> {
-  final nameController = TextEditingController();
-  final bioController = TextEditingController();
+  late TextEditingController nameController;
+  late TextEditingController bioController;
   File? bannerImageFile;
   File? profileImageFile;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -31,10 +37,10 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   }
 
   void selectBannerImage() async {
-    final banner = await pickImage();
-    if (banner != null) {
+    final bannerImage = await pickImage();
+    if (bannerImage != null) {
       setState(() {
-        bannerImageFile = banner;
+        bannerImageFile = bannerImage;
       });
     }
   }
@@ -51,18 +57,35 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserDetailsProvider).value;
+    final isLoading = ref.watch(userProfileControllerProvider);
+    nameController = TextEditingController(
+        text: ref.watch(currentUserDetailsProvider).value?.name ?? '');
+    bioController = TextEditingController(
+        text: ref.watch(currentUserDetailsProvider).value?.bio ?? '');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
         centerTitle: false,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              ref
+                  .read(userProfileControllerProvider.notifier)
+                  .updateUserProfile(
+                    userModel: user!.copyWith(
+                      name: nameController.text,
+                      bio: bioController.text,
+                    ),
+                    context: context,
+                    bannerFile: bannerImageFile,
+                    profileFile: profileImageFile,
+                  );
+            },
             child: const Text('Save'),
           ),
         ],
       ),
-      body: user == null
+      body: isLoading || user == null
           ? const Loader()
           : Column(
               children: [

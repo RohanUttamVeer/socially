@@ -41,6 +41,7 @@ class UserProfile extends ConsumerWidget {
                               )
                             : Image.network(
                                 user.bannerPic,
+                                fit: BoxFit.fitWidth,
                               ),
                       ),
                       Positioned(
