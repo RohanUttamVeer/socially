@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:socially/theme/pallete.dart';
 
 import '../../../models/user_model.dart';
+import '../../user_profile/view/user_profile_view.dart';
 
 class SearchTile extends StatelessWidget {
   final UserModel userModel;
@@ -17,6 +18,12 @@ class SearchTile extends StatelessWidget {
         vertical: 8.0,
         horizontal: 20.0,
       ),
+      onTap: () {
+        Navigator.push(
+          context,
+          UserProfileView.route(userModel),
+        );
+      },
       leading: CircleAvatar(
         backgroundImage: NetworkImage(userModel.profilePic),
         radius: 30,
