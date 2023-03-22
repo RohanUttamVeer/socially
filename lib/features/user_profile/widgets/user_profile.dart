@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socially/features/auth/controller/auth_controller.dart';
 import 'package:socially/features/user_profile/controller/user_profile_controller.dart';
+import 'package:socially/features/user_profile/view/edit_profile_view.dart';
 import 'package:socially/theme/pallete.dart';
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
@@ -55,7 +56,14 @@ class UserProfile extends ConsumerWidget {
                         alignment: Alignment.bottomRight,
                         margin: const EdgeInsets.all(20),
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (currentUser.uid == user.uid) {
+                              Navigator.push(
+                                context,
+                                EditProfileView.route(),
+                              );
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
