@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socially/core/core.dart';
+import 'package:socially/features/user_profile/view/user_profile_view.dart';
 import 'package:socially/models/user_model.dart';
 import '../../../apis/post_api.dart';
 import '../../../apis/storage_api.dart';
@@ -21,6 +22,11 @@ final getUserPostsProvider = FutureProvider.family((ref, String uid) async {
   final userProfileController =
       ref.watch(userProfileControllerProvider.notifier);
   return userProfileController.getUserPosts(uid);
+});
+
+final getLatestUserProfileDataProvider = StreamProvider((ref) {
+  final userAPI = ref.watch(userAPIProvider);
+  return userAPI.getLatestUserProfileData();
 });
 
 class UserProfileController extends StateNotifier<bool> {
@@ -67,7 +73,14 @@ class UserProfileController extends StateNotifier<bool> {
         context,
         l.message,
       ),
-      (r) => Navigator.pop(context),
+      (r) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          UserProfileView.route(userModel),
+        );
+      },
     );
   }
 }

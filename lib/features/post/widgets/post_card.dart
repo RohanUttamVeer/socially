@@ -8,6 +8,7 @@ import 'package:socially/features/auth/controller/auth_controller.dart';
 import 'package:socially/features/post/controller/post_controller.dart';
 import 'package:socially/features/post/widgets/hashtag_text.dart';
 import 'package:socially/features/post/widgets/post_icon_button.dart';
+import 'package:socially/features/user_profile/view/user_profile_view.dart';
 import 'package:socially/theme/pallete.dart';
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
@@ -46,9 +47,17 @@ class PostCard extends ConsumerWidget {
                         children: [
                           Container(
                             margin: const EdgeInsets.all(10.0),
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(user.profilePic),
-                              radius: 35,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  UserProfileView.route(user),
+                                );
+                              },
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(user.profilePic),
+                                radius: 35,
+                              ),
                             ),
                           ),
                           Expanded(
