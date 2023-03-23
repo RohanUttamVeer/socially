@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socially/core/core.dart';
-import 'package:socially/features/user_profile/view/user_profile_view.dart';
 import 'package:socially/models/user_model.dart';
 import '../../../apis/post_api.dart';
 import '../../../apis/storage_api.dart';
@@ -75,10 +74,49 @@ class UserProfileController extends StateNotifier<bool> {
       ),
       (r) {
         Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          UserProfileView.route(userModel),
+        // Navigator.pop(context);
+        // Navigator.push(
+        //   context,
+        //   UserProfileView.route(userModel),
+        // );
+      },
+    );
+  }
+
+  void followUser({
+    required UserModel user,
+    required BuildContext context,
+    required UserModel currentUser,
+  }) async {
+    // already following
+    if (currentUser.following.contains(user.uid)) {
+      user.followers.remove(currentUser.uid);
+      currentUser.following.remove(user.uid);
+    } else {
+      user.followers.add(currentUser.uid);
+      currentUser.following.add(user.uid);
+    }
+
+    user = user.copyWith(followers: user.followers);
+    currentUser = currentUser.copyWith(
+      following: currentUser.following,
+    );
+
+    final response = await _userAPI.followUser(user);
+
+    response.fold(
+      (l) => showSnackBar(
+        context,
+        l.message,
+      ),
+      (r) async {
+        final res = await _userAPI.addToFollowing(currentUser);
+        response.fold(
+          (l) => showSnackBar(
+            context,
+            l.message,
+          ),
+          (r) => null,
         );
       },
     );
