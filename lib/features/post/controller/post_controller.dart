@@ -86,7 +86,7 @@ class PostController extends StateNotifier<bool> {
       print(l.message);
     }, (r) {
       _notificationController.createNotification(
-        text: '${user.name} liked your post !\n${post.text}',
+        text: '${user.name} liked your post !',
         postId: post.id,
         notificationType: NotificationType.like,
         uid: post.uid,
@@ -129,6 +129,12 @@ class PostController extends StateNotifier<bool> {
             );
           },
           (r) {
+            _notificationController.createNotification(
+              text: '${currentUser.name} re-posted your post !',
+              postId: post.id,
+              notificationType: NotificationType.repost,
+              uid: post.uid,
+            );
             showSnackBar(
               context,
               "Re-Posted",
@@ -144,6 +150,7 @@ class PostController extends StateNotifier<bool> {
     required String text,
     required BuildContext context,
     required String repliedTo,
+    required String repliedToUserId,
   }) {
     if (text.isEmpty) {
       showSnackBar(context, 'Please enter text');
@@ -155,12 +162,14 @@ class PostController extends StateNotifier<bool> {
         text: text,
         context: context,
         repliedTo: repliedTo,
+        repliedToUserId: repliedToUserId,
       );
     } else {
       _shareTextTweet(
         context: context,
         text: text,
         repliedTo: repliedTo,
+        repliedToUserId: repliedToUserId,
       );
     }
   }
@@ -175,6 +184,7 @@ class PostController extends StateNotifier<bool> {
     required String text,
     required BuildContext context,
     required String repliedTo,
+    required String repliedToUserId,
   }) async {
     state = true;
     final hashtags = _getHashtagsFromText(text);
@@ -197,20 +207,30 @@ class PostController extends StateNotifier<bool> {
       repliedTo: repliedTo,
     );
     final response = await _postAPI.sharePost(post);
-    state = false;
     response.fold(
       (l) => showSnackBar(
         context,
         l.message,
       ),
-      (r) => null,
+      (r) {
+        if (repliedToUserId.isNotEmpty) {
+          _notificationController.createNotification(
+            text: '${user.name} replied to your post !',
+            postId: r.$id,
+            notificationType: NotificationType.reply,
+            uid: repliedToUserId,
+          );
+        }
+      },
     );
+    state = false;
   }
 
   _shareTextTweet({
     required String text,
     required BuildContext context,
     required String repliedTo,
+    required String repliedToUserId,
   }) async {
     state = true;
     final hashtags = _getHashtagsFromText(text);
@@ -232,14 +252,23 @@ class PostController extends StateNotifier<bool> {
       repliedTo: repliedTo,
     );
     final response = await _postAPI.sharePost(post);
-    state = false;
     response.fold(
       (l) => showSnackBar(
         context,
         l.message,
       ),
-      (r) => null,
+      (r) {
+        if (repliedToUserId.isNotEmpty) {
+          _notificationController.createNotification(
+            text: '${user.name} replied to your post !',
+            postId: r.$id,
+            notificationType: NotificationType.reply,
+            uid: repliedToUserId,
+          );
+        }
+      },
     );
+    state = false;
   }
 
   String _getLinkFromText(String text) {

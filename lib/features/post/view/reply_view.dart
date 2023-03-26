@@ -108,6 +108,7 @@ class ReplyScreen extends ConsumerWidget {
             text: value,
             context: context,
             repliedTo: post.id,
+            repliedToUserId: post.uid,
           );
         },
         decoration: const InputDecoration(

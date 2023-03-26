@@ -26,7 +26,7 @@ class NotificationTile extends StatelessWidget {
                   color: Pallete.redColor,
                   height: 20,
                 )
-              : notification.notificationType == NotificationType.retweet
+              : notification.notificationType == NotificationType.repost
                   ? SvgPicture.asset(
                       AssetsConstants.retweetIcon,
                       color: Pallete.whiteColor,

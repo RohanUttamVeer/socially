@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socially/core/core.dart';
+import 'package:socially/features/notifications/controller/notification_controller.dart';
 import 'package:socially/models/user_model.dart';
 import '../../../apis/post_api.dart';
 import '../../../apis/storage_api.dart';
 import '../../../apis/user_api.dart';
+import '../../../core/enums/notification_type_enum.dart';
 import '../../../models/post_model.dart';
 import 'dart:io';
 
@@ -14,6 +16,7 @@ final userProfileControllerProvider =
     postAPI: ref.watch(postAPIProvider),
     storageAPI: ref.watch(storageAPIProvider),
     userAPI: ref.watch(userAPIProvider),
+    notificationController: ref.watch(notificationControllerProvider.notifier),
   );
 });
 
@@ -32,13 +35,16 @@ class UserProfileController extends StateNotifier<bool> {
   final PostAPI _postAPI;
   final StorageAPI _storageAPI;
   final UserAPI _userAPI;
+  final NotificationController _notificationController;
   UserProfileController({
     required PostAPI postAPI,
     required StorageAPI storageAPI,
     required UserAPI userAPI,
+    required NotificationController notificationController,
   })  : _postAPI = postAPI,
         _storageAPI = storageAPI,
         _userAPI = userAPI,
+        _notificationController = notificationController,
         super(false);
 
   Future<List<Post>> getUserPosts(String uid) async {
@@ -116,7 +122,14 @@ class UserProfileController extends StateNotifier<bool> {
             context,
             l.message,
           ),
-          (r) => null,
+          (r) {
+            _notificationController.createNotification(
+              text: '${currentUser.name} followed you !',
+              postId: '',
+              notificationType: NotificationType.follow,
+              uid: user.uid,
+            );
+          },
         );
       },
     );
