@@ -56,3 +56,4 @@ class MyApp extends ConsumerWidget {
 // => enums, extension
 // => autodispose in appwrite
 // TODO: pass ip address from mobile in place of local host or ***.***.*.*** static
+// TODO: import '../../../models/notification_model.dart' as model; as keyword
