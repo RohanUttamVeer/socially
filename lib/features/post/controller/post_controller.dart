@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socially/core/enums/notification_type_enum.dart';
+import 'package:socially/features/notifications/controller/notification_controller.dart';
 
 import '../../../apis/post_api.dart';
 import '../../../apis/storage_api.dart';
@@ -18,6 +20,7 @@ final postControllerProvider =
     ref: ref,
     postAPI: ref.watch(postAPIProvider),
     storageAPI: ref.watch(storageAPIProvider),
+    notificationController: ref.watch(notificationControllerProvider.notifier),
   );
 });
 
@@ -43,15 +46,18 @@ final getPostByIdProvider = FutureProvider.family((ref, String id) async {
 class PostController extends StateNotifier<bool> {
   final PostAPI _postAPI;
   final StorageAPI _storageAPI;
+  final NotificationController _notificationController;
   final Ref _ref;
 
   PostController({
     required Ref ref,
     required PostAPI postAPI,
     required StorageAPI storageAPI,
+    required NotificationController notificationController,
   })  : _ref = ref,
         _postAPI = postAPI,
         _storageAPI = storageAPI,
+        _notificationController = notificationController,
         super(false);
 
   Future<List<Post>> getPosts() async {
@@ -78,7 +84,14 @@ class PostController extends StateNotifier<bool> {
     final res = await _postAPI.likeTweet(post);
     res.fold((l) {
       print(l.message);
-    }, (r) => null);
+    }, (r) {
+      _notificationController.createNotification(
+        text: '${user.name} liked your post !\n${post.text}',
+        postId: post.id,
+        notificationType: NotificationType.like,
+        uid: post.uid,
+      );
+    });
   }
 
   void resharePost(
